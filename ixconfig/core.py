@@ -1,3 +1,4 @@
+import shlex
 import fnmatch
 import subprocess
 from . import util
@@ -28,7 +29,8 @@ class _BaseConfig(util.attrdict):
     def _get_output(self):
         cmd = self.cmd
         return subprocess.check_output(
-            cmd.strip().split(' ') if isinstance(cmd, str) else cmd,
+            shlex.split(cmd) if isinstance(cmd, str) else cmd,
+            stderr=subprocess.STDOUT,
         ).decode('utf-8')
 
     def _process_results(self, result):
